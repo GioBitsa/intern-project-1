@@ -1,23 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+import AppHeader from './components/AppHeader';
+import AppTable from './components/AppTable';
+import axios from 'axios';
+
+axios.defaults.baseURL = "https://localhost:44322/swagger/index.html";
+axios.defaults.headers.common['ApiKey'] = "crTK#PLnfFri7c35^?YfmM64U=^9KL";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <AppHeader />
+      <AppTable />
     </div>
   );
 }
