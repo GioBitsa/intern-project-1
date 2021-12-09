@@ -20,13 +20,13 @@ const AppForm = ({type, handleSubmit}) => {
             form.resetFields();
             setSubmited(false)
         }, 2000);
-        {
-            type === "add" ?
-            createList(values) :
-            type === "edit" ?
-            editList(values) :
-            deleteList(values)
-        }
+        // {
+        //     type === "add" ?
+        //     createList(values) :
+        //     type === "edit" ?
+        //     editList(values) :
+        //     deleteList(values)
+        // }
     };
 
     function handleChange(value) {
