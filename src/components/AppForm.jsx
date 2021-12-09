@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import { Form, Input, Button, Select, Spin } from 'antd';
+import axios from 'axios';
 import { UserOutlined, HomeOutlined, IdcardOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
 const { Option } = Select;
 
 
-const AppForm = ({type}) => {
+
+const AppForm = ({type, handleSubmit}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);
@@ -12,17 +14,50 @@ const AppForm = ({type}) => {
 
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
-        console.log(type);
         setSubmited(true);
+        handleSubmit(true)
         setTimeout(function() {
             form.resetFields();
             setSubmited(false)
         }, 2000);
-        
+        {
+            type === "add" ?
+            createList(values) :
+            type === "edit" ?
+            editList(values) :
+            deleteList(values)
+        }
     };
 
     function handleChange(value) {
         console.log(`selected ${value}`);
+    }
+
+    const createList = (list) => {
+       const data = list={
+           "id": list.id,
+           "fullName": list.name,
+            "dob": list.date,
+            "genderID": list.gender,
+            "phone": list.phone,
+            "address": list.address
+       }
+       axios.post("https://localhost:44322/Patient/Post", data)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => console.log(error.request))
+    }
+
+    const editList = (list) => {
+        console.log(list);
+    }
+
+    const deleteList = (list) => {
+        const data = parseInt(list.id);
+        axios.delete('https://localhost:44322/Patient/Delete', data)
+            .then(res => console.log(res))
+            .catch(error => console.log(error))
     }
 
 
@@ -144,8 +179,13 @@ const AppForm = ({type}) => {
                 <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" />
             </Form.Item>
             <Form.Item>
-                <Button type="danger" htmlType="submit" className="login-form-button">
+                <Button type="danger" htmlType="submit" onClick={onFinish} className="login-form-button">
                     Delete
+                    {submited && 
+                        <>
+                            <Spin style={{marginLeft: '10px'}} indicator={antIcon} />
+                        </>
+                    }
                 </Button>
             </Form.Item>
             </>

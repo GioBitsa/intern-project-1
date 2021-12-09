@@ -1,43 +1,25 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Table} from 'antd';
 import axios from 'axios'
 
-const AppTable = () => {
+
+const AppTable = ({submitProp}) => {
+
+  const [dataSource, setDataSource] = useState()
+  
 
   useEffect(() => {
     axios.get("https://localhost:44322/Patient/ListGet")
       .then(res => {
-        console.log(res);
+        setDataSource(res.data.data);
+        console.log("Table updated");
       })
       .catch(error => {
         console.log(error);
       })
-  }, [])
+  }, [submitProp])
 
-  const dataSource = [
-    {
-      key: '1',
-      id: 1,
-      name: 'Mike',
-      age: 32,
-      address: '10 Downing Street',
-    },
-    {
-      key: '2',
-      id: 2,
-      name: 'tony',
-      age: 24,
-      address: '10 Downing Street',
-    },
-    {
-      key: '3',
-      id: 3,
-      name: 'John',
-      age: 42,
-      address: '10 Downing Street',
-    },
-  ];
-      
+
   const columns = [
     {
       title: 'ID',
@@ -46,8 +28,8 @@ const AppTable = () => {
     },
     {
       title: 'Fullname',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'fullName',
+      key: 'fullName',
     },
     {
       title: 'Date',
@@ -55,9 +37,9 @@ const AppTable = () => {
       key: 'dob',
     },
     {
-      title: 'genderID',
-      dataIndex: 'genderID',
-      key: 'genderID',
+      title: 'Gender',
+      dataIndex: 'genderName',
+      key: 'genderName',
     },
     {
       title: 'Phone',

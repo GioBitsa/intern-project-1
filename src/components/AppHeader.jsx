@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import AppForm from './AppForm';
 
-const AppHeader = () => {
+const AppHeader = ({handleSubmitApp}) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formType, setFormType] = useState('');
@@ -20,6 +20,10 @@ const AppHeader = () => {
     setIsModalVisible(false);
   };
 
+  const handleSubmit = (item) => {
+    handleSubmitApp(item)
+  }
+
   return (
     <div className="btn-container">
       <Button type="primary" onClick={() => showModal('add')}>
@@ -32,7 +36,7 @@ const AppHeader = () => {
         Delete
       </Button>
       <Modal footer={null} title="Form" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <AppForm type={formType} />
+        <AppForm handleSubmit={handleSubmit} type={formType} />
       </Modal>
     </div>
   );
