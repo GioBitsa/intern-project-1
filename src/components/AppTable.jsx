@@ -55,7 +55,7 @@ const AppTable = ({submitProp}) => {
 
   return (
     <>
-      <Table dataSource={dataSource} columns={columns} />;
+      <Table dataSource={dataSource} columns={columns} />
     </>
   )
 }

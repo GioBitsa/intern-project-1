@@ -6,7 +6,7 @@ const { Option } = Select;
 
 
 
-const AppForm = ({type, handleSubmit}) => {
+const AppForm = ({type, handleSubmit, handleOk}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);
@@ -15,38 +15,38 @@ const AppForm = ({type, handleSubmit}) => {
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
         setSubmited(true);
-        handleSubmit(true)
+        handleSubmit(true);
         setTimeout(function() {
             form.resetFields();
-            setSubmited(false)
-        }, 2000);
-        // {
-        //     type === "add" ?
-        //     createList(values) :
-        //     type === "edit" ?
-        //     editList(values) :
-        //     deleteList(values)
-        // }
+            handleOk(true);
+            setSubmited(false);
+        }, 1000);
+        
+        type === "add" ?
+        createList(values) :
+        type === "edit" ?
+        editList(values) :
+        deleteList(values)
+        
     };
 
-    function handleChange(value) {
-        console.log(`selected ${value}`);
-    }
-
     const createList = (list) => {
-       const data = list={
-           "id": list.id,
+       list = {
+           "id": parseInt(list.id),
            "fullName": list.name,
-            "dob": list.date,
-            "genderID": list.gender,
+            "dob": "2021-12-10T08:15:14.456Z",
+            "genderID": 0,
             "phone": list.phone,
             "address": list.address
        }
-       axios.post("https://localhost:44322/Patient/Post", data)
-        .then(res => {
-            console.log(res);
+       axios.post(`https://localhost:44322/Patient/Post`, list)
+       .then(res => {
+           console.log(res);
+       })
+       .catch(error => {
+            console.log(error);
         })
-        .catch(error => console.log(error.request))
+        
     }
 
     const editList = (list) => {
@@ -55,7 +55,7 @@ const AppForm = ({type, handleSubmit}) => {
 
     const deleteList = (list) => {
         const data = parseInt(list.id);
-        axios.delete('https://localhost:44322/Patient/Delete', data)
+        axios.delete(`https://localhost:44322/Patient/Delete?PatientID=${data}`, data)
             .then(res => console.log(res))
             .catch(error => console.log(error))
     }
@@ -119,7 +119,7 @@ const AppForm = ({type, handleSubmit}) => {
                   },
                 ]}
             >
-                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender" onChange={handleChange}>
+                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender">
                     <Option value="male">Male</Option>
                     <Option value="female">Female</Option>
                     <Option value="other">Other...</Option>

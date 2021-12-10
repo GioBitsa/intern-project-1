@@ -12,7 +12,7 @@ const AppHeader = ({handleSubmitApp}) => {
     setFormType(item);
   };
 
-  const handleOk = () => {
+  const handleOk = (item) => {
     setIsModalVisible(false);
   };
 
@@ -36,7 +36,7 @@ const AppHeader = ({handleSubmitApp}) => {
         Delete
       </Button>
       <Modal footer={null} title="Form" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <AppForm handleSubmit={handleSubmit} type={formType} />
+        <AppForm handleOk={handleOk} handleSubmit={handleSubmit} type={formType} />
       </Modal>
     </div>
   );
