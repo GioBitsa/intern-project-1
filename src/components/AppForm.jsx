@@ -132,8 +132,8 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                 ]}
             >
                 <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender">
-                    <Option value={1}>Male</Option>
-                    <Option value={2}>Female</Option>
+                    <Option value={1}>მამრობითი</Option>
+                    <Option value={2}>მდედრობითი</Option>
                 </Select>
             </Form.Item>
             <Form.Item
