@@ -12,7 +12,6 @@ const AppTable = ({submitProp}) => {
     axios.get("https://localhost:44322/Patient/ListGet")
       .then(res => {
         setDataSource(res.data.data);
-        console.log("Table updated");
       })
       .catch(error => {
         console.log(error);

@@ -13,7 +13,6 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
         setSubmited(true);
         handleSubmit(true);
         setTimeout(function() {
@@ -31,32 +30,45 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
     };
 
     const createList = (list) => {
-       list = {
-           "id": parseInt(list.id),
-           "fullName": list.name,
+        handleSubmit(false)
+        list = {
+            "id": 0,
+            "fullName": list.name,
             "dob": "2021-12-10T08:15:14.456Z",
-            "genderID": 0,
+            "genderID": list.gender,
             "phone": list.phone,
             "address": list.address
-       }
-       axios.post(`https://localhost:44322/Patient/Post`, list)
-       .then(res => {
-           console.log(res);
-       })
-       .catch(error => {
-            console.log(error);
-        })
-        
+        }
+        axios.post(`https://localhost:44322/Patient/Post`, list)
+            .then(res => {
+                handleSubmit(true)
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     const editList = (list) => {
-        console.log(list);
+        handleSubmit(false);
+        const data = parseInt(list.id);
+        list = {
+            "id": data,
+            "fullName": list.name,
+             "dob": list.date,
+             "genderID": list.gender,
+             "phone": list.phone,
+             "address": list.address
+        }
+        axios.post(`https://localhost:44322/Patient/post?PatientID=${data}`, list)
+            .then(handleSubmit(true))
+            .catch(error => console.log(error))
     }
 
     const deleteList = (list) => {
+        handleSubmit(false);
         const data = parseInt(list.id);
-        axios.delete(`https://localhost:44322/Patient/Delete?PatientID=${data}`, data)
-            .then(res => console.log(res))
+        axios.delete(`https://localhost:44322/Patient/Delete?PatientID=${data}`)
+            .then(handleSubmit(true))
             .catch(error => console.log(error))
     }
 
@@ -120,9 +132,8 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                 ]}
             >
                 <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender">
-                    <Option value="male">Male</Option>
-                    <Option value="female">Female</Option>
-                    <Option value="other">Other...</Option>
+                    <Option value={1}>Male</Option>
+                    <Option value={2}>Female</Option>
                 </Select>
             </Form.Item>
             <Form.Item
