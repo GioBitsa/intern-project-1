@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
-import { Form, Input, Button, Select, Spin } from 'antd';
+import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
 import axios from 'axios';
 import { UserOutlined, HomeOutlined, IdcardOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
+import moment from 'moment';
+
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const { Option } = Select;
 
 
+const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
 
-const AppForm = ({type, handleSubmit, handleOk}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);
@@ -21,32 +24,9 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
             setSubmited(false);
         }, 1000);
         
-        type === "add" ?
-        createList(values) :
-        type === "edit" ?
-        editList(values) :
-        deleteList(values)
+        editList(values)
         
     };
-
-    const createList = (list) => {
-        handleSubmit(false)
-        list = {
-            "id": 0,
-            "fullName": list.name,
-            "dob": "2021-12-10T08:15:14.456Z",
-            "genderID": list.gender,
-            "phone": list.phone,
-            "address": list.address
-        }
-        axios.post(`https://localhost:44322/Patient/Post`, list)
-            .then(res => {
-                handleSubmit(true)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
 
     const editList = (list) => {
         handleSubmit(false);
@@ -59,18 +39,12 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
              "phone": list.phone,
              "address": list.address
         }
-        axios.post(`https://localhost:44322/Patient/post?PatientID=${data}`, list)
-            .then(handleSubmit(true))
-            .catch(error => console.log(error))
+        // axios.post(`https://localhost:44322/Patient/post?PatientID=${data}`, list)
+        //     .then(handleSubmit(true))
+        //     .catch(error => console.log(error))
     }
 
-    const deleteList = (list) => {
-        handleSubmit(false);
-        const data = parseInt(list.id);
-        axios.delete(`https://localhost:44322/Patient/Delete?PatientID=${data}`)
-            .then(handleSubmit(true))
-            .catch(error => console.log(error))
-    }
+    console.log(rowInfo);
 
 
     return (
@@ -83,18 +57,16 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
             }}
             onFinish={onFinish}
         >
-            {type !== "delete" ?
-            <>
             <Form.Item
                 name="id"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your ID!',
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: 'Please input your ID!',
+                //   },
+                // ]}
             >
-                <Input prefix={<IdcardOutlined className="site-form-item-icon" />} placeholder="ID" />
+                <Input prefix={<IdcardOutlined className="site-form-item-icon" />} placeholder={rowInfo['id']} disabled />
             </Form.Item>
             <Form.Item
                 name="name"
@@ -105,7 +77,7 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                   },
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Fullname" />
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={rowInfo['fullName']} />
             </Form.Item>
             <Form.Item
                 name="date"
@@ -116,10 +88,11 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                   },
                 ]}
             >
-                <Input
+                <DatePicker 
+                    style={{width: '100%'}}
+                    format={dateFormatList} 
                     prefix={<CalendarOutlined className="site-form-item-icon" />}
-                    type="date"
-                    placeholder="Date"
+                    placeholder={rowInfo['dob']}
                 />
             </Form.Item>
             <Form.Item
@@ -131,7 +104,7 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                   },
                 ]}
             >
-                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender">
+                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder={rowInfo['genderName']}>
                     <Option value={1}>მამრობითი</Option>
                     <Option value={2}>მდედრობითი</Option>
                 </Select>
@@ -148,7 +121,7 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                 <Input
                     prefix={<PhoneOutlined className="site-form-item-icon" />}
                     type="number"
-                    placeholder="Phone"
+                    placeholder={rowInfo['phone']}
                 />
             </Form.Item>
             <Form.Item
@@ -162,7 +135,7 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
             >
                 <Input
                     prefix={<HomeOutlined className="site-form-item-icon" />}
-                    placeholder="Address"
+                    placeholder={rowInfo['address']}
                 />
             </Form.Item>
             <Form.Item>
@@ -175,34 +148,8 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                     }
                 </Button>
             </Form.Item>
-            </>
-            :
-            <>
-            <Form.Item
-                name="id"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your ID!',
-                  },
-                ]}
-            >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" />
-            </Form.Item>
-            <Form.Item>
-                <Button type="danger" htmlType="submit" onClick={onFinish} className="login-form-button">
-                    Delete
-                    {submited && 
-                        <>
-                            <Spin style={{marginLeft: '10px'}} indicator={antIcon} />
-                        </>
-                    }
-                </Button>
-            </Form.Item>
-            </>
-            }
         </Form>
     )
 }
 
-export default AppForm
+export default AppEdit

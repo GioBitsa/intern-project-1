@@ -1,40 +1,40 @@
-import React, {useState} from 'react';
-import { Form, Input, Button, Select, Spin } from 'antd';
+import React, {useState, useEffect} from 'react';
+import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
 import axios from 'axios';
-import { UserOutlined, HomeOutlined, IdcardOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
+import moment from 'moment';
+import { UserOutlined, HomeOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
 const { Option } = Select;
 
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 
-
-const AppForm = ({type, handleSubmit, handleOk}) => {
+const AppAdd = ({visible, handleSubmit, handleOk}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
     const onFinish = (values) => {
-        setSubmited(true); // for animation when submited
-        handleSubmit(true);
+        setSubmited(true); // for adding animation when submited
+        handleSubmit(true); // for re-rendering table when I add a new info
         setTimeout(function() {
-            form.resetFields();
-            handleOk(true);
-            setSubmited(false);
+            form.resetFields(); // for resetting form inputs
+            handleOk(true); // for closing modal when submited
+            setSubmited(false); // for cancelling animation when submited
         }, 1000);
-        
-        type === "add" ?
-        createList(values) :
-        type === "edit" ?
-        editList(values) :
-        deleteList(values)
+    
+        createList(values) // for adding a new list row
         
     };
 
+
+    // creating new list item
+
     const createList = (list) => {
         handleSubmit(false)
+        // list['date'].format('MM/DD/YYYY HH:mm:ss') // formating date DD/MM/YYYY
         list = {
-            "id": 0,
             "fullName": list.name,
-            "dob": "2021-12-10T08:15:14.456Z",
+            "dob": list['date'],
             "genderID": list.gender,
             "phone": list.phone,
             "address": list.address
@@ -48,29 +48,22 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
             })
     }
 
-    const editList = (list) => {
-        handleSubmit(false);
-        const data = parseInt(list.id);
-        list = {
-            "id": data,
-            "fullName": list.name,
-             "dob": list.date,
-             "genderID": list.gender,
-             "phone": list.phone,
-             "address": list.address
-        }
-        axios.post(`https://localhost:44322/Patient/post?PatientID=${data}`, list)
-            .then(handleSubmit(true))
-            .catch(error => console.log(error))
-    }
 
-    const deleteList = (list) => {
-        handleSubmit(false);
-        const data = parseInt(list.id);
-        axios.delete(`https://localhost:44322/Patient/Delete?PatientID=${data}`)
-            .then(handleSubmit(true))
-            .catch(error => console.log(error))
-    }
+
+    // getting gender list from server
+
+    // const [genderInfo, setGenderInfo] = useState();
+
+    // useEffect(() => {
+    //     axios.get("https://localhost:44322/Gender/ListGet")
+    //     .then(res => {
+    //         setGenderInfo(res.data.data)
+    //     }).then(console.log(genderInfo))
+    //     .catch(error => {
+    //         console.log(error);
+    //       })
+    // }, [visible])
+
 
 
     return (
@@ -83,19 +76,6 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
             }}
             onFinish={onFinish}
         >
-            {type !== "delete" ?
-            <>
-            <Form.Item
-                name="id"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your ID!',
-                  },
-                ]}
-            >
-                <Input prefix={<IdcardOutlined className="site-form-item-icon" />} placeholder="ID" />
-            </Form.Item>
             <Form.Item
                 name="name"
                 rules={[
@@ -116,10 +96,11 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                   },
                 ]}
             >
-                <Input
+                <DatePicker 
+                    style={{width: '100%'}}
+                    format={dateFormatList} 
                     prefix={<CalendarOutlined className="site-form-item-icon" />}
-                    type="date"
-                    placeholder="Date"
+                    placeholder={"Date"}
                 />
             </Form.Item>
             <Form.Item
@@ -132,8 +113,11 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                 ]}
             >
                 <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender">
-                    <Option value={1}>მამრობითი</Option>
-                    <Option value={2}>მდედრობითი</Option>
+                    <Option value={1}>male</Option>
+                    <Option value={2}>female</Option>
+                    {/* {genderInfo.map((item) => {
+                        <Option value={genderInfo['genderID']}>{genderInfo['genderName']}</Option>
+                    })} */}
                 </Select>
             </Form.Item>
             <Form.Item
@@ -167,7 +151,7 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
-                    {type === "add" ? "Save" : "Update"}
+                    დამატება
                     {submited && 
                         <>
                             <Spin style={{marginLeft: '10px'}} indicator={antIcon} />
@@ -175,34 +159,8 @@ const AppForm = ({type, handleSubmit, handleOk}) => {
                     }
                 </Button>
             </Form.Item>
-            </>
-            :
-            <>
-            <Form.Item
-                name="id"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your ID!',
-                  },
-                ]}
-            >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" />
-            </Form.Item>
-            <Form.Item>
-                <Button type="danger" htmlType="submit" onClick={onFinish} className="login-form-button">
-                    Delete
-                    {submited && 
-                        <>
-                            <Spin style={{marginLeft: '10px'}} indicator={antIcon} />
-                        </>
-                    }
-                </Button>
-            </Form.Item>
-            </>
-            }
         </Form>
     )
 }
 
-export default AppForm
+export default AppAdd

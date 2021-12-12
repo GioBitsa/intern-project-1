@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {Table} from 'antd';
+import { Table } from 'antd';
 import axios from 'axios'
 
 
-const AppTable = ({submitProp}) => {
+const AppTable = ({submitProp, selectedRow}) => {
 
-  const [dataSource, setDataSource] = useState()
+  const [dataSource, setDataSource] = useState();
   
 
   useEffect(() => {
@@ -26,35 +26,52 @@ const AppTable = ({submitProp}) => {
       key: 'id',
     },
     {
-      title: 'Fullname',
+      title: 'სრული სახელი',
       dataIndex: 'fullName',
       key: 'fullName',
     },
     {
-      title: 'Date',
+      title: 'დაბადების თარიღი',
       dataIndex: 'dob',
       key: 'dob',
     },
     {
-      title: 'Gender',
+      title: 'სქესი',
       dataIndex: 'genderName',
       key: 'genderName',
     },
     {
-      title: 'Phone',
+      title: 'ტელეფონის ნომერი',
       dataIndex: 'phone',
       key: 'phone',
     },
     {
-      title: 'Address',
+      title: 'მისამართი',
       dataIndex: 'address',
       key: 'address',
     },
   ];
 
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      selectedRow(selectedRows[0]);
+    }
+  };
+
   return (
     <>
-      <Table dataSource={dataSource} columns={columns} />
+      <div>
+
+        <Table
+          rowSelection={{
+            type: "radio",
+            ...rowSelection,
+          }}
+          columns={columns}
+          dataSource={dataSource}
+        />
+    </div>
     </>
   )
 }

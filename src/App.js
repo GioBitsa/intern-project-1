@@ -13,10 +13,16 @@ function App() {
     setHandleSubmit(item)
   }
 
+  const [selectedRowInfo, setselectedRowInfo] = useState()
+
+  const selectedRow = (item) => {
+    setselectedRowInfo(item)
+  }
+
   return (
     <div className="app">
-      <AppHeader handleSubmitApp={handleSubmitApp} />
-      <AppTable submitProp={handleSubmit} />
+      <AppHeader selectedRowInfo={selectedRowInfo} handleSubmitApp={handleSubmitApp} />
+      <AppTable selectedRow={selectedRow} submitProp={handleSubmit} />
     </div>
   );
 }
