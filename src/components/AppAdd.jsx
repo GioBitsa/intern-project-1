@@ -85,7 +85,7 @@ const AppAdd = ({visible, handleSubmit, handleOk}) => {
                   },
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Fullname" />
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={"სრული სახელი"} />
             </Form.Item>
             <Form.Item
                 name="date"
@@ -100,7 +100,7 @@ const AppAdd = ({visible, handleSubmit, handleOk}) => {
                     style={{width: '100%'}}
                     format={dateFormatList} 
                     prefix={<CalendarOutlined className="site-form-item-icon" />}
-                    placeholder={"Date"}
+                    placeholder={"დაბადების თარიღი"}
                 />
             </Form.Item>
             <Form.Item
@@ -112,7 +112,7 @@ const AppAdd = ({visible, handleSubmit, handleOk}) => {
                   },
                 ]}
             >
-                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="Gender">
+                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="სქესი">
                     <Option value={1}>male</Option>
                     <Option value={2}>female</Option>
                     {/* {genderInfo.map((item) => {
@@ -132,7 +132,7 @@ const AppAdd = ({visible, handleSubmit, handleOk}) => {
                 <Input
                     prefix={<PhoneOutlined className="site-form-item-icon" />}
                     type="number"
-                    placeholder="Phone"
+                    placeholder="ტელეფონის ნომერი"
                 />
             </Form.Item>
             <Form.Item
@@ -146,7 +146,7 @@ const AppAdd = ({visible, handleSubmit, handleOk}) => {
             >
                 <Input
                     prefix={<HomeOutlined className="site-form-item-icon" />}
-                    placeholder="Address"
+                    placeholder="მისამართი"
                 />
             </Form.Item>
             <Form.Item>

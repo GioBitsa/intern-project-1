@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
 import axios from 'axios';
 import { UserOutlined, HomeOutlined, IdcardOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
@@ -7,9 +7,7 @@ import moment from 'moment';
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const { Option } = Select;
 
-
-const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
-
+const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);
@@ -18,6 +16,7 @@ const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
     const onFinish = (values) => {
         setSubmited(true); // for animation when submited
         handleSubmit(true);
+        
         setTimeout(function() {
             form.resetFields();
             handleOk(true);
@@ -25,36 +24,48 @@ const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
         }, 1000);
         
         editList(values)
-        
+
     };
 
     const editList = (list) => {
         handleSubmit(false);
         const data = parseInt(list.id);
+        const genderID = list.gender === "მამრობითი" ? 1 : 2;
         list = {
             "id": data,
             "fullName": list.name,
-             "dob": list.date,
-             "genderID": list.gender,
-             "phone": list.phone,
-             "address": list.address
+            "dob": list.date,
+            "genderID": genderID,
+            "phone": list.phone,
+            "address": list.address
         }
-        // axios.post(`https://localhost:44322/Patient/post?PatientID=${data}`, list)
-        //     .then(handleSubmit(true))
-        //     .catch(error => console.log(error))
+        axios.post(`https://localhost:44322/Patient/post?PatientID=${data}`, list)
+            .then(handleSubmit(true))
+            .catch(error => console.log(error))
     }
 
-    console.log(rowInfo);
+    
+    let inputData = {
+        ...rowInfo,
+        name: rowInfo['fullName'],
+        gender: rowInfo['genderName'],
+        date: rowInfo['dob']
+    }
 
+    const updateForm = () => {
+        form.resetFields()
+    }
+
+    useEffect(() => {
+        updateForm()
+    }, [handleSubmit]);
 
     return (
         <Form
+            name="form-name"
             form={form}
-            name="normal_login"
             className="login-form"
-            initialValues={{
-                remember: true,
-            }}
+            initialValues={inputData}
             onFinish={onFinish}
         >
             <Form.Item
@@ -77,7 +88,7 @@ const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
                   },
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={rowInfo['fullName']} />
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="სრული სახელი" />
             </Form.Item>
             <Form.Item
                 name="date"
@@ -88,23 +99,28 @@ const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
                   },
                 ]}
             >
-                <DatePicker 
+                <Input
+                    style={{width: '100%'}}
+                    prefix={<CalendarOutlined className="site-form-item-icon" />}
+                    placeholder="დაბადების თარიღი"
+                />
+                {/* <DatePicker
                     style={{width: '100%'}}
                     format={dateFormatList} 
                     prefix={<CalendarOutlined className="site-form-item-icon" />}
                     placeholder={rowInfo['dob']}
-                />
+                /> */}
             </Form.Item>
             <Form.Item
                 name="gender"
                 rules={[
                   {
                     required: false,
-                    message: 'Please input your Date!',
+                    message: 'Please input your Gender!',
                   },
                 ]}
             >
-                <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder={rowInfo['genderName']}>
+                <Select prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="სქესი">
                     <Option value={1}>მამრობითი</Option>
                     <Option value={2}>მდედრობითი</Option>
                 </Select>
@@ -121,7 +137,7 @@ const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
                 <Input
                     prefix={<PhoneOutlined className="site-form-item-icon" />}
                     type="number"
-                    placeholder={rowInfo['phone']}
+                    placeholder="ტელეფონის ნომერი"
                 />
             </Form.Item>
             <Form.Item
@@ -135,12 +151,12 @@ const AppEdit = ({type, handleSubmit, handleOk, rowInfo}) => {
             >
                 <Input
                     prefix={<HomeOutlined className="site-form-item-icon" />}
-                    placeholder={rowInfo['address']}
+                    placeholder="მისამართი"
                 />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
-                    {type === "add" ? "Save" : "Update"}
+                    Save
                     {submited && 
                         <>
                             <Spin style={{marginLeft: '10px'}} indicator={antIcon} />

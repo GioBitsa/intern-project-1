@@ -56,7 +56,7 @@ const AppHeader = ({handleSubmitApp, selectedRowInfo}) => {
           formType === "add" ? 
           <AppAdd handleOk={handleOk} handleSubmit={handleSubmit} visible={isModalVisible} /> :
           formType === "edit" ? 
-          <AppEdit handleOk={handleOk} handleSubmit={handleSubmit} type={formType} rowInfo={rowInfo} /> :
+          <AppEdit handleOk={handleOk} handleSubmit={handleSubmit} rowInfo={rowInfo} /> :
           formType === "delete" ?
           <AppDelete handleOk={handleOk} handleSubmit={handleSubmit} rowInfo={rowInfo} /> :
           "nothing"
