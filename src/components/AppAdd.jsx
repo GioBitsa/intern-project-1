@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
+// import React, {useState, useEffect} from 'react';
 import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
+// import moment from 'moment';
 import { UserOutlined, HomeOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
 const { Option } = Select;
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 
-const AppAdd = ({visible, handleSubmit, handleOk}) => {
+// ({visible, handleSubmit, handleOk})
+
+const AppAdd = ({handleSubmit, handleOk}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);

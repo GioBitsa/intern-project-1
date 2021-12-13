@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
+// import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
+import { Form, Input, Button, Select, Spin } from 'antd';
 import axios from 'axios';
 import { UserOutlined, HomeOutlined, IdcardOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
-import moment from 'moment';
+// import moment from 'moment';
 
-const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
+// const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
 const { Option } = Select;
 
 const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
