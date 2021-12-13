@@ -113,8 +113,8 @@ const AppAdd = ({visible, handleSubmit, handleOk}) => {
                 ]}
             >
                 <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="სქესი">
-                    <Option value={1}>male</Option>
-                    <Option value={2}>female</Option>
+                    <Option value={1}>მამრობითი</Option>
+                    <Option value={2}>მდედრობითი</Option>
                     {/* {genderInfo.map((item) => {
                         <Option value={genderInfo['genderID']}>{genderInfo['genderName']}</Option>
                     })} */}

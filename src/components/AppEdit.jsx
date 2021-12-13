@@ -31,10 +31,20 @@ const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
         handleSubmit(false);
         const data = parseInt(list.id);
         const genderID = list.gender === "მამრობითი" ? 1 : 2;
+        
+        let date = list.date
+        let dateList = date.split('-')
+        let newDate = '';
+        if (dateList[0].length > 2){
+            newDate = date + 'T12:00:00'
+        }else{
+            newDate = dateList[2] + '-' + dateList[1] + '-' + dateList[0] + 'T12:00:00'
+        }
+        
         list = {
             "id": data,
             "fullName": list.name,
-            "dob": list.date,
+            "dob": newDate,
             "genderID": genderID,
             "phone": list.phone,
             "address": list.address
@@ -100,6 +110,7 @@ const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
                 ]}
             >
                 <Input
+                    type="date"
                     style={{width: '100%'}}
                     prefix={<CalendarOutlined className="site-form-item-icon" />}
                     placeholder="დაბადების თარიღი"
