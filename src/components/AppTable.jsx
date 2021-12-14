@@ -11,7 +11,7 @@ const AppTable = ({submitProp, selectedRow}) => {
     axios.get("https://localhost:44322/Patient/ListGet")
       .then(res => {
         const data = res.data.data;
-
+        
         // date format dd/mm/yyyy
         for(var i = 0; i < data.length; i++){
           const date = data[i].dob;
