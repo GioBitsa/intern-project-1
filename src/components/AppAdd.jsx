@@ -14,6 +14,14 @@ const AppAdd = ({handleSubmit, handleOk}) => {
 
     const [form] = Form.useForm();
     const [submited, setSubmited] = useState(false);
+    const [newRules, setNewRules] = useState(
+        [
+            {
+              required: false,
+              message: 'Please input your Phone!',
+            },
+        ]
+    )
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
     const onFinish = (values) => {
@@ -48,6 +56,47 @@ const AppAdd = ({handleSubmit, handleOk}) => {
             .catch(error => {
                 console.log(error);
             })
+    }
+
+    
+
+    // number validation
+
+    const handleNum = (value) => {
+        if(value.length > 0){
+            if(value[0] == 5){
+                setNewRules([
+                    {
+                        required: true,
+                        message: "გთხოვთ შეიყვანოთ სწორი ტელეფონის ნომერი!",
+                    },
+                    {
+                        pattern: /^\d{9}$/,
+                        message: "ტელეფონის ნომერი უნდა შედგებოდეს 9 ციფრისგან!",
+                    }
+                ])
+            }else{
+                setNewRules([
+                    {
+                        required: true,
+                        message: "გთხოვთ შეიყვანოთ სწორი ტელეფონის ნომერი!",
+                    },
+                    {
+                        max: 0,
+                        message: "ტელეფონის ნომერი უნდა იწყებოდეს ციფრი 5-ით!",
+                    },
+                ])
+            }
+            
+        }else{
+            setNewRules([
+                {
+                    required: false,
+                    message: "გთხოვთ შეიყვანოთ სწორი ტელეფონის ნომერი!",
+                },
+            ])
+        }
+        console.log(value.length);
     }
 
 
@@ -104,17 +153,15 @@ const AppAdd = ({handleSubmit, handleOk}) => {
             </Form.Item>
             <Form.Item
                 name="phone"
-                rules={[
-                  {
-                    required: false,
-                    message: 'Please input your Phone!',
-                  },
-                ]}
+                rules={newRules}
+                onChange={(e) => handleNum(e.target.value)}
+                
             >
                 <Input
                     prefix={<PhoneOutlined className="site-form-item-icon" />}
                     type="number"
                     placeholder="ტელეფონის ნომერი"
+                    
                 />
             </Form.Item>
             <Form.Item
