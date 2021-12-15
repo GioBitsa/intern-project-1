@@ -10,3 +10,11 @@
 .btn-container button {
     margin: 0 10px;
 }
+
+.ant-table-row {
+    cursor: pointer;
+}
+
+.ant-table-row-selected{
+    background-color: #e6f7ff !important;
+}

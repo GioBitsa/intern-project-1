@@ -34,7 +34,6 @@ const AppAdd = ({handleSubmit, handleOk}) => {
 
     const createList = (list) => {
         handleSubmit(false)
-        // list['date'].format('MM/DD/YYYY HH:mm:ss') // formating date DD/MM/YYYY
         list = {
             "fullName": list.name,
             "dob": list['date'],
@@ -52,23 +51,6 @@ const AppAdd = ({handleSubmit, handleOk}) => {
     }
 
 
-
-    // getting gender list from server
-
-    // const [genderInfo, setGenderInfo] = useState();
-
-    // useEffect(() => {
-    //     axios.get("https://localhost:44322/Gender/ListGet")
-    //     .then(res => {
-    //         setGenderInfo(res.data.data)
-    //     }).then(console.log(genderInfo))
-    //     .catch(error => {
-    //         console.log(error);
-    //       })
-    // }, [visible])
-
-
-
     return (
         <Form
             form={form}
@@ -84,7 +66,7 @@ const AppAdd = ({handleSubmit, handleOk}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Fullname!',
+                    message: 'გთხოვთ შეიყვანოთ პაციენტის გვარი და სახელი!',
                   },
                 ]}
             >
@@ -95,7 +77,7 @@ const AppAdd = ({handleSubmit, handleOk}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Date!',
+                    message: 'გთხოვთ შეიყვანოთ დაბადების თარიღი!',
                   },
                 ]}
             >
@@ -110,17 +92,14 @@ const AppAdd = ({handleSubmit, handleOk}) => {
                 name="gender"
                 rules={[
                   {
-                    required: false,
-                    message: 'Please input your Date!',
+                    required: true,
+                    message: 'გთხოვთ შეიყვანოთ სქესი!',
                   },
                 ]}
             >
                 <Select  prefix={<CalendarOutlined className="site-form-item-icon" />} placeholder="სქესი">
                     <Option value={1}>მამრობითი</Option>
                     <Option value={2}>მდედრობითი</Option>
-                    {/* {genderInfo.map((item) => {
-                        <Option value={genderInfo['genderID']}>{genderInfo['genderName']}</Option>
-                    })} */}
                 </Select>
             </Form.Item>
             <Form.Item

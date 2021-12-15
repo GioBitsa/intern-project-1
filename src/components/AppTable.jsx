@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { Table } from 'antd';
 import axios from 'axios';
+import moment from 'moment';
+
+const dateFormatList = ['DD-MM-YYYY', 'DD-MM-YY'];
 
 const AppTable = ({submitProp, selectedRow}) => {
 
   const [dataSource, setDataSource] = useState();
-  
 
   useEffect(() => {
     axios.get("https://localhost:44322/Patient/ListGet")
@@ -16,20 +18,10 @@ const AppTable = ({submitProp, selectedRow}) => {
         for(var i = 0; i < data.length; i++){
           const date = data[i].dob;
 
-          function pad2(n) {
-            return (n < 10 ? '0' : '') + n;
-          }
-          
-          var newDate = new Date(date);
-          var month = pad2(newDate.getMonth()+1); //months (0-11)
-          var day = pad2(newDate.getDate()); //day (1-31)
-          var year = newDate.getFullYear();
-          
-          var formattedDate =  day + "-" + month + "-" + year;
+          let formattedDate = moment(date).format(dateFormatList[0])
           
           data[i].dob = formattedDate
         }
-
         setDataSource(data)
       })
       .catch(error => {
@@ -45,7 +37,7 @@ const AppTable = ({submitProp, selectedRow}) => {
       key: 'id',
     },
     {
-      title: 'სრული სახელი',
+      title: 'პაციენტის გვარი, სახელი',
       dataIndex: 'fullName',
       key: 'fullName',
     },
@@ -73,24 +65,28 @@ const AppTable = ({submitProp, selectedRow}) => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       selectedRow(selectedRows[0]);
-    }
+    },
   };
+
 
   return (
     <>
-      <div>
-
-        <Table
-          rowSelection={{
-            type: "radio",
-            ...rowSelection,
-          }}
-          columns={columns}
-          dataSource={dataSource}
-        />
-    </div>
+    <Table
+      onRow={(record) => {
+        return {
+          onClick: event => {
+            selectedRow(record)
+          }, // click row
+        };
+      }}
+      rowSelection={{
+        type: "radio",
+        ...rowSelection,
+      }}
+      columns={columns}
+      dataSource={dataSource}
+    />
     </>
   )
 }

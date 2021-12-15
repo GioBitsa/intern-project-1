@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-// import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
-import { Form, Input, Button, Select, Spin } from 'antd';
+import { Form, Input, Button, Select, Spin, DatePicker } from 'antd';
 import axios from 'axios';
 import { UserOutlined, HomeOutlined, IdcardOutlined, CalendarOutlined, PhoneOutlined, LoadingOutlined  } from '@ant-design/icons';
-// import moment from 'moment';
+import moment from 'moment';
 
-// const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
+const dateFormatList = ['DD-MM-YYYY', 'DD-MM-YY'];
+
 const { Option } = Select;
 
 const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
@@ -32,20 +32,18 @@ const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
         handleSubmit(false);
         const data = parseInt(list.id);
         const genderID = list.gender === "მამრობითი" ? 1 : 2;
+
+        const date = moment(list['date']);
+        const day = date.date();
+        const dateList = date.format(dateFormatList[0]).split('-')
+        dateList[0] = day
         
-        let date = list.date
-        let dateList = date.split('-')
-        let newDate = '';
-        if (dateList[0].length > 2){
-            newDate = date + 'T12:00:00'
-        }else{
-            newDate = dateList[2] + '-' + dateList[1] + '-' + dateList[0] + 'T12:00:00'
-        }
-        
+        const finalDate = dateList[2] + '-' + dateList[1] + '-' + dateList[0] + 'T17:17:05.686Z'
+
         list = {
             "id": data,
             "fullName": list.name,
-            "dob": newDate,
+            "dob": finalDate,
             "genderID": genderID,
             "phone": list.phone,
             "address": list.address
@@ -60,7 +58,7 @@ const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
         ...rowInfo,
         name: rowInfo['fullName'],
         gender: rowInfo['genderName'],
-        date: rowInfo['dob']
+        date: moment(rowInfo['dob'], dateFormatList[0])
     }
 
     const updateForm = () => {
@@ -95,7 +93,7 @@ const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Fullname!',
+                    message: 'გთხოვთ შეიყვანოთ პაციენტის გვარი და სახელი!',
                   },
                 ]}
             >
@@ -106,29 +104,23 @@ const AppEdit = ({handleSubmit, handleOk, rowInfo}) => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Date!',
+                    message: 'გთხოვთ შეიყვანოთ დაბადების თარიღი!',
                   },
                 ]}
             >
-                <Input
-                    type="date"
-                    style={{width: '100%'}}
-                    prefix={<CalendarOutlined className="site-form-item-icon" />}
-                    placeholder="დაბადების თარიღი"
-                />
-                {/* <DatePicker
+                <DatePicker
                     style={{width: '100%'}}
                     format={dateFormatList} 
                     prefix={<CalendarOutlined className="site-form-item-icon" />}
                     placeholder={rowInfo['dob']}
-                /> */}
+                />
             </Form.Item>
             <Form.Item
                 name="gender"
                 rules={[
                   {
                     required: false,
-                    message: 'Please input your Gender!',
+                    message: 'გთხოვთ შეიყვანოთ სქესი!',
                   },
                 ]}
             >

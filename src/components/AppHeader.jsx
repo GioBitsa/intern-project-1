@@ -14,7 +14,7 @@ const AppHeader = ({handleSubmitApp, selectedRowInfo}) => {
 
     if(item === 'edit' || item === 'delete'){
       if(selectedRowInfo === undefined){
-        alert("Please tag user")
+        alert("მონიშნეთ ჩანაწერი!")
       }else{
         setIsModalVisible(true);
         setFormType(item);
@@ -45,12 +45,12 @@ const AppHeader = ({handleSubmitApp, selectedRowInfo}) => {
         დამატება
       </Button>
       <Button type="default" onClick={() => showModal('edit')}>
-        შეცვლა
+        რედაქტირება
       </Button>
       <Button type="danger" onClick={() => showModal('delete')}>
         წაშლა
       </Button>
-      <Modal footer={null} title={formType === "add" ? "დაამატე" : formType === "edit" ? "დაარედაქტირე" : formType === "delete" ? "დარწმუნებული ხარ?" : "Form"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal footer={null} title={formType === "add" ? "დამატება" : formType === "edit" ? "რედაქტირება" : formType === "delete" ? "წაშლა" : "Form"} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         {
           formType === "add" ? 
           <AppAdd handleOk={handleOk} handleSubmit={handleSubmit} visible={isModalVisible} /> :
